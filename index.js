@@ -44,7 +44,7 @@ function getManager(){
             case "Intern":
                 return addIntern();
             default:
-                return renderHtml();
+                return generateHtml(listing);
         }
     });
 }
@@ -85,7 +85,7 @@ function addEngineer(){
             case "Intern":
                 return addIntern();
             default:
-                return renderHtml();
+                return generateHtml(listing);
         }
     });
 }
@@ -126,7 +126,7 @@ function addIntern(){
             case "Intern":
                 return addIntern();
             default:
-                return renderHtml();
+                return generateHtml(listing);
         }
     });
 }
@@ -136,13 +136,13 @@ function renderManager(manager){
     <div class="col-4 mt-4">
       <div class="card h-100">
         <div class="card-header">
-            <h3>${manager.name}</h3>
+            <h3>${manager.getName()}</h3>
             <h4>Manager</h4><i class="material-icons">content_paste</i>
         </div>
         <div class="card-body">
-            <p class="id">ID: ${manager.id}</p>
-            <p class="email">Email: <a href="#">${manager.email}</a></p>
-            <p class="office">Office Number: ${manager.officeNumber}</p>
+            <p class="id">ID: ${manager.getId()}</p>
+            <p class="email">Email: <a href="#">${manager.getEmail()}</a></p>
+            <p class="office">Office Number: ${manager.getOfficeNumber()}</p>
         </div>
       </div>
     </div>
@@ -154,13 +154,13 @@ function renderEngineer(engineer){
     <div class="col-4 mt-4">
       <div class="card h-100">
         <div class="card-header">
-            <h3>${engineer.name}</h3>
+            <h3>${engineer.getName()}</h3>
             <h4>Engineer</h4><i class="material-icons">laptop_mac</i>
         </div>
         <div class="card-body">
-            <p class="id">ID: ${engineer.id}</p>
-            <p class="email">Email: <a href="#">${engineer.email}</a></p>
-            <p class="github">Github: <a href="#">${engineer.github}</a></p>
+            <p class="id">ID: ${engineer.getId()}</p>
+            <p class="email">Email: <a href="#">${engineer.getEmail()}</a></p>
+            <p class="github">Github: <a href="#">${engineer.getGithub()}</a></p>
         </div>
       </div>
     </div>
@@ -173,13 +173,13 @@ function renderIntern(intern){
     <div class="col-4 mt-4">
       <div class="card h-100">
         <div class="card-header">
-            <h3>${intern.name}</h3>
+            <h3>${intern.getName()}</h3>
             <h4>Intern</h4><i class="material-icons">assignment_ind</i>
         </div>
         <div class="card-body">
-            <p class="id">ID: ${intern.id}</p>
-            <p class="email">Email:<a href="#}">${intern.email}</a></p>
-            <p class="school">School: ${intern.school}</p>
+            <p class="id">ID: ${intern.getId()}</p>
+            <p class="email">Email:<a href="#}">${intern.getEmail()}</a></p>
+            <p class="school">School: ${intern.getSchool()}</p>
         </div>
       </div>
     </div>
@@ -200,8 +200,49 @@ function renderCard(member){
 }
 
 
-function renderHtml(){
+function renderHtml(listing){
     console.log(listing)
+    const cards = listing.map((member)=>renderCard(member));
+    console.log("cards",cards);
+
+    return`
+    <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Team Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="jumbotron jumbotron-fluid bg-info">
+      <div class="container">
+        <h1 class="display-4 text-center text-white">My Team</h1>
+      </div>
+    </div>
+   
+      <div class="container">
+        <div class="row justify-content-center" id="team-cards">
+        ${cards.join("")}
+
+        </div>
+    </div>
+
+    
+</body>
+</html>
+    `;
+}
+function generateHtml(listing){
+    const html = renderHtml(listing);
+    fs.writeFile("./dist/index.html",html,(err)=>{
+    if(err){
+        console.log(err);
+        return;
+    }
+    console.log("Success!!!");
+  })
 }
 
 getManager();
