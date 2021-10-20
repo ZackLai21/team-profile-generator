@@ -1,4 +1,3 @@
-const Employee = require("./lib/Employee");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
@@ -7,7 +6,7 @@ const fs = require("fs");
 
 const listing =[];
 
-
+//prompt the questions for users
 function getManager(){
     return inquirer.prompt([
         {
@@ -49,6 +48,7 @@ function getManager(){
     });
 }
 
+//If the user choose to add engineer, prompt the questions to add a engineer
 function addEngineer(){
     return inquirer.prompt([
         {
@@ -90,6 +90,7 @@ function addEngineer(){
     });
 }
 
+//If the user choose to add intern, prompt the questions to add a intern
 function addIntern(){
     return inquirer.prompt([
         {
@@ -131,17 +132,18 @@ function addIntern(){
     });
 }
 
+//helper function to build a manager card
 function renderManager(manager){
     return`
     <div class="col-4 mt-4">
-      <div class="card h-100">
-        <div class="card-header">
+      <div class="card h-100 shadow-lg">
+        <div class="card-header bg-info text-white">
             <h3>${manager.getName()}</h3>
-            <h4>Manager</h4><i class="material-icons">content_paste</i>
+            <h4>Manager</h4>
         </div>
         <div class="card-body">
             <p class="id">ID: ${manager.getId()}</p>
-            <p class="email">Email: <a href="#">${manager.getEmail()}</a></p>
+            <p class="email">Email: <a href="mailto:${manager.getEmail()}">${manager.getEmail()}</a></p>
             <p class="office">Office Number: ${manager.getOfficeNumber()}</p>
         </div>
       </div>
@@ -149,36 +151,37 @@ function renderManager(manager){
     `
 }
 
+//helper function to bulid an engineer card
 function renderEngineer(engineer){
     return`
     <div class="col-4 mt-4">
-      <div class="card h-100">
-        <div class="card-header">
+      <div class="card h-100 shadow-lg">
+        <div class="card-header bg-info text-white">
             <h3>${engineer.getName()}</h3>
-            <h4>Engineer</h4><i class="material-icons">laptop_mac</i>
+            <h4>Engineer</h4>
         </div>
         <div class="card-body">
             <p class="id">ID: ${engineer.getId()}</p>
-            <p class="email">Email: <a href="#">${engineer.getEmail()}</a></p>
-            <p class="github">Github: <a href="#">${engineer.getGithub()}</a></p>
+            <p class="email">Email: <a href="mailto:${engineer.getEmail()}">${engineer.getEmail()}</a></p>
+            <p class="github">Github: <a href="https://github.com/${engineer.getGithub()}" target="_blank">${engineer.getGithub()}</a></p>
         </div>
       </div>
     </div>
     `
 }
 
-
+//helper function to bulid an intern card
 function renderIntern(intern){
     return`
     <div class="col-4 mt-4">
-      <div class="card h-100">
-        <div class="card-header">
+      <div class="card h-100 shadow-lg">
+        <div class="card-header bg-info text-white">
             <h3>${intern.getName()}</h3>
-            <h4>Intern</h4><i class="material-icons">assignment_ind</i>
+            <h4>Intern</h4>
         </div>
         <div class="card-body">
             <p class="id">ID: ${intern.getId()}</p>
-            <p class="email">Email:<a href="#}">${intern.getEmail()}</a></p>
+            <p class="email">Email:<a href="mailto:${intern.getEmail()}">${intern.getEmail()}</a></p>
             <p class="school">School: ${intern.getSchool()}</p>
         </div>
       </div>
@@ -186,6 +189,7 @@ function renderIntern(intern){
     `
 }
 
+//helper function to decision which card to build
 function renderCard(member){
     switch(member.getRole()){
         case "Manager":
@@ -199,12 +203,9 @@ function renderCard(member){
     }
 }
 
-
+//function to bulid the whole html
 function renderHtml(listing){
-    console.log(listing)
     const cards = listing.map((member)=>renderCard(member));
-    console.log("cards",cards);
-
     return`
     <!DOCTYPE html>
 <html lang="en">
@@ -234,6 +235,8 @@ function renderHtml(listing){
 </html>
     `;
 }
+
+//write the html into file
 function generateHtml(listing){
     const html = renderHtml(listing);
     fs.writeFile("./dist/index.html",html,(err)=>{
@@ -245,4 +248,5 @@ function generateHtml(listing){
   })
 }
 
+//init
 getManager();
